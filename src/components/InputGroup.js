@@ -3,8 +3,7 @@ import { Text, TextInput, View } from 'react-native';
 import { colors } from '../config';
 
 
-export default function InputGroup ({label, input, type}) {
-	const [inputValue, setInputValue] = useState('');
+export default function InputGroup ({label, inputValue, type, onChangeText, placeholder}) {
 	return (
 		<View
 			style={{
@@ -26,10 +25,10 @@ export default function InputGroup ({label, input, type}) {
 			<TextInput
 				textAlign='right'
 				textContentType={type}
-				placeholder={label}
+				placeholder={placeholder || label}
 				placeholderTextColor={colors.textGrey}
 				value={inputValue}
-				onChangeText={setInputValue}
+				onChangeText={onChangeText}
 				secureTextEntry={type.includes('password')}
 				selectTextOnFocus
 			/>
