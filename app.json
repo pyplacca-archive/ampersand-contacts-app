@@ -1,8 +1,9 @@
 {
   "expo": {
-    "name": "ampersand",
-    "slug": "ampersand",
+    "name": "Ampersand-Contacts",
+    "slug": "Ampersand-Contacts",
     "version": "1.0.0",
+    "sdkVersion": "40.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
