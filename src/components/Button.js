@@ -14,6 +14,7 @@ export default function Button ({children, onPress, style={}}) {
 				justifyContent: 'center',
 				...style
 			}}
+			onPress={onPress}
 		>
 			<Text
 				style={{
