@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { ScrollView, View, Text, Image } from 'react-native';
 import { InputGroup, Button } from '../../../components';
@@ -7,16 +7,56 @@ import { AppContext } from '../../../store';
 
 
 const inputs = [
-	{label: 'Full Name', type: 'username'},
-	{label: 'Email', type: 'emailAddress'},
-	{label: 'Phone Number', type: 'telephoneNumber'},
-	{label: 'Role', type: 'none'},
-	{label: 'Twitter', type: 'none'},
-	{label: 'Linkedin', type: 'none'},
+	{
+		label: 'Full Name',
+		type: 'username',
+		name: 'fullname',
+		placeholder: 'Jane Doe'
+	},
+	{
+		label: 'Email',
+		type: 'emailAddress',
+		name: 'email',
+		placeholder: 'janedoe@placeholder.com'
+	},
+	{
+		label: 'Phone Number',
+		type: 'telephoneNumber',
+		name: 'telephone',
+		placeholder: '1234567890'
+	},
+	{
+		label: 'Role',
+		type: 'none',
+		name: 'role',
+		placeholder: 'Managing Director'
+	},
+	{
+		label: 'Twitter',
+		type: 'none',
+		name: 'twitter',
+		placeholder: '@janedoe'
+	},
+	{
+		label: 'Linkedin',
+		type: 'none',
+		name: 'linkedin',
+		placeholder: '/jane.doe'
+	},
 ]
 
 export default function Register ({navigation}) {
 	const {state, dispatch} = useContext(AppContext);
+
+	const [values, setValues] = useState({});
+
+	const handleInputChange = name => {
+		return value => setValues({
+			...values,
+			[name]: value
+		})
+	}
+
 	return (
 		<View
 			style={{
@@ -39,8 +79,13 @@ export default function Register ({navigation}) {
 				}}
 			>
 				{
-					inputs.map((opts, i) => (
-						<InputGroup {...opts} key={i}/>
+					inputs.map(({name, ...opts}, i) => (
+						<InputGroup
+							{...opts}
+							inputValue={values[name]}
+							onChangeText={handleInputChange(name)}
+							key={i}
+						/>
 					))
 				}
 				<Button
