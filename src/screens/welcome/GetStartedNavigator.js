@@ -14,6 +14,7 @@ export default function GetStartedNavigator ({navigation}) {
 					backgroundColor: colors.primary,
 				},
 				headerTitle: props => <HeaderTitle {...props}/>,
+				headerTitleAlign: 'center',
 				headerBackImage: () => (
 					<MaterialCommunityIcons
 						name="keyboard-backspace"
@@ -21,7 +22,6 @@ export default function GetStartedNavigator ({navigation}) {
 						color="#fff"
 					/>
 				),
-				headerTitleAlign: 'center',
 			}}
 			screens={[
 				{
