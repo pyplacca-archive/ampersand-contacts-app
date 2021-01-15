@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { ScrollView, View, Text, Image } from 'react-native';
 import { InputGroup, Button, LinkButton } from '../../../components';
@@ -6,7 +6,38 @@ import { ImageFrame } from '../../../components/get-started';
 import { colors } from '../../../config';
 
 
+let errorTimeout;
+
 export default function SignIn () {
+	const [showError, setShowError] = useState(false);
+	const [values, setValues] = useState({})
+
+	const handleInputChange = name => {
+		return value => setValues({
+			...values,
+			[name]: value
+		})
+	};
+
+	const handleSignIn = () => {
+		if (!credentialsAreValid()) {
+			clearTimeout(errorTimeout)
+			setShowError(true)
+			errorTimeout = setTimeout(() => setShowError(false), 5000)
+		} else {
+			showLoadingScreen()
+		}
+	}
+
+	const credentialsAreValid = () => {
+		const {email, password} = values;
+		return email && password
+	}
+
+	const showLoadingScreen = () => {
+
+	}
+
 	return (
 		<View
 			style={{
@@ -32,9 +63,25 @@ export default function SignIn () {
 					padding: 25
 				}}
 			>
-				<InputGroup label='Email' type='emailAddress'/>
-				<InputGroup label='Password' type='password'/>
+				{
+					showError ? (
+						<ErrorLabel>Email or Password is incorrect. Check and try again</ErrorLabel>
+					) : null
+				}
+				<InputGroup
+					label='Email'
+					type='emailAddress'
+					inputValue={values.email}
+					onChangeText={handleInputChange('email')}
+				/>
+				<InputGroup
+					label='Password'
+					type='password'
+					inputValue={values.password}
+					onChangeText={handleInputChange('password')}
+				/>
 				<Button
+					onPress={handleSignIn}
 					style={{
 						marginTop: 20,
 						marginBottom: 35,
@@ -66,3 +113,17 @@ export default function SignIn () {
 		</View>
 	)
 };
+
+
+function ErrorLabel (props) {
+	return (
+		<Text
+			style={{
+				color: colors.primary,
+				marginBottom: 20
+			}}
+		>
+			{props.children}
+		</Text>
+	)
+}
