@@ -8,7 +8,20 @@ import appReducer from './reducer'
 */
 const initialState = {
 	signedIn: false,
-	user: {},
+	user: {
+		name: 'Lady-Omega Hammond',
+		role: 'Team Lead & Co-Founder',
+		photo: {
+			uri: 'https://www.ampersandllc.co/wp-content/uploads/2019/10/Miss-Hammond.jpg'
+		},
+		telephone: '+233 12 345 6789',
+		email: 'ladyomega@ampersandllc.co',
+		location: 'Accra, Ghana',
+		social: {
+			twitter: '@Lonnah',
+			linkedin: 'lady omega',
+		}
+	},
 }
 
 export const AppContext = createContext();
