@@ -11,16 +11,10 @@ function WelcomeNavigator () {
 				{
 					name: 'welcome',
 					component: WelcomeScreen,
-					// options: {
-					// 	headerShown: false
-					// },
 				},
 				{
 					name: 'get-started',
 					component: GetStartedNavigator,
-					// options: {
-					// 	headerShown: false
-					// }
 				},
 			]}
 		/>
