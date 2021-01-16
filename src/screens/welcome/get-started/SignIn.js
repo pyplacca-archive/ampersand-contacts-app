@@ -126,4 +126,4 @@ function ErrorLabel (props) {
 			{props.children}
 		</Text>
 	)
-}
+};
