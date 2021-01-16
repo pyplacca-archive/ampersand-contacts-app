@@ -5,10 +5,12 @@ import { QRCode } from 'react-native-custom-qr-codes-expo';
 import { Button, ProfileCard } from '../../components';
 import { AppContext } from '../../store';
 import { colors } from '../../config';
+import { str2ab } from '../../utils';
 
 
 export default function HomeScreen ({navigation}) {
-	const {state} = useContext(AppContext);
+	const {state: {user}} = useContext(AppContext);
+	const contactDetails = str2ab(JSON.stringify(user)).toString();
 	return (
 		<View
 			style={{
@@ -53,15 +55,9 @@ export default function HomeScreen ({navigation}) {
 						marginVertical: 70
 					}}
 				>
-					<QRCode
-						content={JSON.stringify(state.user)}
-					/>
+					<QRCode content={contactDetails}/>
 				</View>
-				<ProfileCard
-					name='Jane Doe'
-					role='Managing Director'
-					photo={require('../../../assets/logo-square.png')}
-				/>
+				<ProfileCard name={user.name} role={user.role} photo={user.photo}/>
 			</View>
 			<View
 				style={{
