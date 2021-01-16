@@ -9,18 +9,18 @@ export default function AppNavigator() {
   return (
     <NavigationContainer>
       <StackNavigation
+        screenOptions={{
+          headerShown: false,
+        }}
         screens={[
-          {
-            name: 'welcome',
-            component: WelcomeNavigator,
-            options: {
-              headerShown: false
-            }
-          },
           {
             name: 'home',
             component: HomeNavigator,
-          }
+          },
+          {
+            name: 'welcome',
+            component: WelcomeNavigator,
+          },
         ]}
       />
     </NavigationContainer>
