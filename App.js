@@ -1,8 +1,6 @@
 import React from 'react';
-// import { StatusBar } from 'expo-status-bar';
 import { useFonts } from '@use-expo/font';
 import AppLoading from 'expo-app-loading';
-import { StatusBar, View } from 'react-native';
 import AppNavigator from './src/AppNavigator';
 import AppProvider from './src/store';
 
