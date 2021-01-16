@@ -1,9 +1,8 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { ScrollView, View, Text, Image } from 'react-native';
 import { InputGroup, Button } from '../../../components';
 import { ImageFrame, ImagePlaceholder } from '../../../components/get-started';
-import { AppContext } from '../../../store';
 
 
 const inputs = [
@@ -46,9 +45,8 @@ const inputs = [
 ]
 
 export default function Register ({navigation}) {
-	const {state, dispatch} = useContext(AppContext);
-
 	const [values, setValues] = useState({});
+	const [photo, setPhoto] = useState()
 
 	const handleInputChange = name => {
 		return value => setValues({
@@ -66,9 +64,20 @@ export default function Register ({navigation}) {
 			<StatusBar style='light'/>
 			<ImageFrame>
 				{
-					!state.user.photo
-					? <ImagePlaceholder/>
-					: <Image source={state.user.photo}/>
+					!photo ? (
+						<ImagePlaceholder/>
+					) : (
+						<View>
+							<Image
+								source={photo}
+								style={{
+									width: '100%',
+									resizeMode: 'cover',
+									height: '100%'
+								}}
+							/>
+						</View>
+					)
 				}
 			</ImageFrame>
 			<ScrollView
