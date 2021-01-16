@@ -1,7 +1,22 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, Image } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
+
+export function HeaderLogo ({style, ...props}) {
+	return (
+		<Image
+			source={require('../../assets/logo-tint.png')}
+			style={{
+				height: 35,
+				resizeMode: 'contain',
+				marginBottom: 20,
+				...style
+			}}
+			{...props}
+		/>
+	)
+};
 
 export function HeaderTitle (props) {
 	return (
