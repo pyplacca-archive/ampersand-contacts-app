@@ -3,13 +3,17 @@ import { Pressable, Text } from 'react-native';
 import { colors } from '../config';
 
 
-export default function Button ({children, onPress, style={}}) {
+function Button ({children, onPress, style={}, inverted=false, textStyle}) {
 	return (
 		<Pressable
 			style={{
 				borderRadius: 5,
-				backgroundColor: colors.primary,
+				backgroundColor: !inverted ? colors.primary : 'transparent',
 				padding: 17,
+				// paddingVertical: 17,
+				// paddingHorizontal: 25,
+				borderColor: colors.primary,
+				borderWidth: 1.5,
 				alignItems: 'center',
 				justifyContent: 'center',
 				...style
@@ -18,13 +22,16 @@ export default function Button ({children, onPress, style={}}) {
 		>
 			<Text
 				style={{
-					color: '#fff',
+					color: !inverted ? '#fff' : colors.primary,
 					textTransform: 'uppercase',
-					letterSpacing: 2.5
+					letterSpacing: 2.5,
+					...textStyle
 				}}
 			>
 				{ children }
 			</Text>
 		</Pressable>
 	)
-}
+};
+
+export default Button;
