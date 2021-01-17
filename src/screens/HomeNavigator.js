@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { StackNavigation } from '../components/navigators';
-import { HomeScreen, MyProfile } from './home';
-import HomeScreenHeader from '../components/home/Header';
+import { HomeScreenHeader } from '../components/home';
+import { HomeScreen, MyProfile, MemberProfile, QRScanner } from './home';
 
 
 function HomeNavigator ({navigation}) {
@@ -16,10 +16,24 @@ function HomeNavigator ({navigation}) {
 					}
 				},
 				{
+					name: 'scanner',
+					component: QRScanner,
+					options: {
+						headerShown: false
+					}
+				},
+				{
 					name: 'my-profile',
 					component: MyProfile,
 					options: {
 						title: 'My Profile'
+					}
+				},
+				{
+					name: 'member-profile',
+					component: MemberProfile,
+					options: {
+						title: 'Member Profile'
 					}
 				}
 			]}
