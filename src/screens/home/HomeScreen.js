@@ -18,8 +18,8 @@ export default function HomeScreen ({navigation, route}) {
   useEffect(() => {
   	const {scan} = route.params || {};
   	if (scan && !resultIn) {
-  		alert (`BarCode scan complete\n\nType: ${scan.type}\nData: ${scan.data}`)
   		setResultIn(true)
+  		alert (`BarCode scan complete\n\nType: ${scan.type}\nData: ${scan.data}`)
   	}
   }, [route.params])
 
