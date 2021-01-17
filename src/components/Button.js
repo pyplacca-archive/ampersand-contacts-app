@@ -10,8 +10,6 @@ function Button ({children, onPress, style={}, inverted=false, textStyle}) {
 				borderRadius: 5,
 				backgroundColor: !inverted ? colors.primary : 'transparent',
 				padding: 17,
-				// paddingVertical: 17,
-				// paddingHorizontal: 25,
 				borderColor: colors.primary,
 				borderWidth: 1.5,
 				alignItems: 'center',
