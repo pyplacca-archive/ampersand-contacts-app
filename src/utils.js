@@ -8,5 +8,5 @@ export function str2ab(str) {
   for (let i=0, len=str.length; i < len; i++) {
     bufView[i] = str.charCodeAt(i);
   }
-  return buf;
+  return bufView;
 };
