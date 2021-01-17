@@ -8,13 +8,13 @@ import Scan from '../../icons/scan.svg';
 
 
 export default function QRScanner ({navigation}) {
-	const [hasPermission, setHasPermission] = useState(null);
+	const [accessGranted, setAccessGranted] = useState(null);
 
   useEffect(() => {
   	// request for permission to access device camera to scan BarCode
     (async () => {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
-      setHasPermission(status === 'granted');
+      setAccessGranted(status === 'granted');
     })();
   }, []);
 
@@ -59,9 +59,9 @@ export default function QRScanner ({navigation}) {
 					</Pressable>
 				</View>
 				{
-					hasPermission === null ? (
+					accessGranted === null ? (
 						<Text>Requesting for camera permission...</Text>
-					) : hasPermission === false ? (
+					) : accessGranted === false ? (
 						<Text>No access to camera</Text>
 					) : (
 						<React.Fragment>
