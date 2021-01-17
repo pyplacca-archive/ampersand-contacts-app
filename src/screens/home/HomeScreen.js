@@ -1,22 +1,37 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { Text, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { QRCode } from 'react-native-custom-qr-codes-expo';
+import { BarCodeScanner } from 'expo-barcode-scanner';
+import { Ionicons } from '@expo/vector-icons';
 import { Button, ProfileCard } from '../../components';
+import { BottomSection } from '../../components/home';
 import { AppContext } from '../../store';
 import { colors } from '../../config';
-import { str2ab } from '../../utils';
+// import { str2ab } from '../../utils';
 
 
-export default function HomeScreen ({navigation}) {
+export default function HomeScreen ({navigation, route}) {
 	const {state: {user}} = useContext(AppContext);
-	const contactDetails = str2ab(JSON.stringify(user)).toString();
+	const [resultIn, setResultIn] = useState(false);
+
+  useEffect(() => {
+  	const {scan} = route.params || {};
+  	if (scan && !resultIn) {
+  		alert (`BarCode scan complete\n\nType: ${scan.type}\nData: ${scan.data}`)
+  		setResultIn(true)
+  	}
+  }, [route.params])
+
+  const goToScanner = () => {
+		setResultIn(false)
+		navigation.navigate('scanner')
+	}
+
+	const contactDetails = 'https://codetraingh.com/' // JSON.stringify(str2ab(JSON.stringify(user)));
+
 	return (
-		<View
-			style={{
-				flex: 1
-			}}
-		>
+		<View style={{ flex: 1 }}>
 			<StatusBar style='light'/>
 			<View
 				style={{
@@ -26,11 +41,7 @@ export default function HomeScreen ({navigation}) {
 					paddingVertical: 50,
 				}}
 			>
-				<View
-					style={{
-						maxWidth: 300
-					}}
-				>
+				<View style={{ maxWidth: 300 }}>
 					<Text
 						style={{
 							fontWeight: 'bold',
@@ -59,41 +70,11 @@ export default function HomeScreen ({navigation}) {
 				</View>
 				<ProfileCard name={user.name} role={user.role} photo={user.photo}/>
 			</View>
-			<View
-				style={{
-					flexDirection: 'row',
-					alignItems: 'center',
-					justifyContent: 'space-between',
-					paddingHorizontal: 30,
-					paddingVertical: 20,
-					borderColor: "#d2d2d2",
-					borderTopWidth: 1,
-					marginTop: 'auto'
-				}}
-			>
-				<Text
-					style={{
-						fontSize: 16,
-					}}
-				>
-					Want to add a new connection?
-				</Text>
-				<Button
-					inverted
-					style={{
-						marginLeft: 25,
-						paddingHorizontal: 20,
-						paddingVertical: 8,
-						borderRadius: 3,
-					}}
-					textStyle={{
-						letterSpacing: 0,
-						textTransform: 'none'
-					}}
-				>
-					Scan QR
-				</Button>
-			</View>
+			<BottomSection
+				text='Want to add a new connection?'
+				btnText='Scan QR'
+				onBtnPress={goToScanner}
+			/>
 		</View>
 	)
 };
