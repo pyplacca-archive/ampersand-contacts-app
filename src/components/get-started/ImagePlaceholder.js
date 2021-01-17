@@ -6,11 +6,11 @@ import { colors } from '../../config';
 
 export default function ImagePlaceholder ({style, onPress}) {
 	return (
-			<View
-				style={{
-					flex: 1
-				}}
-			>
+		<View
+			style={{
+				flex: 1
+			}}
+		>
 			<Pressable
 				onPress={onPress}
 				android_ripple={{
@@ -37,6 +37,6 @@ export default function ImagePlaceholder ({style, onPress}) {
 					Add profile photo
 				</Text>
 			</Pressable>
-			</View>
+		</View>
 	)
 };
