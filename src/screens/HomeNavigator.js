@@ -1,7 +1,8 @@
 import React, { useContext } from 'react';
 import { StackNavigation } from '../components/navigators';
 import { HomeScreenHeader } from '../components/home';
-import { HomeScreen, MyProfile, MemberProfile, QRScanner } from './home';
+import * as Home from './home';
+import { horizontalCardStyle } from '../config';
 
 
 function HomeNavigator ({navigation}) {
@@ -10,28 +11,30 @@ function HomeNavigator ({navigation}) {
 			screens={[
 				{
 					name: 'home',
-					component: HomeScreen,
+					component: Home.HomeScreen,
 					options: {
 						header: props => <HomeScreenHeader {...props}/>,
 					}
 				},
 				{
 					name: 'scanner',
-					component: QRScanner,
+					component: Home.QRScanner,
 					options: {
-						headerShown: false
+						headerShown: false,
+						...horizontalCardStyle,
+						gestureEnabled: false,
 					}
 				},
 				{
 					name: 'my-profile',
-					component: MyProfile,
+					component: Home.MyProfile,
 					options: {
 						title: 'My Profile'
 					}
 				},
 				{
 					name: 'member-profile',
-					component: MemberProfile,
+					component: Home.MemberProfile,
 					options: {
 						title: 'Member Profile'
 					}

@@ -1,6 +1,6 @@
 import React from 'react';
 import { StackNavigation } from '../components/navigators';
-import { GetStartedNavigator, WelcomeScreen } from './welcome';
+import * as Welcome from './welcome';
 
 
 function WelcomeNavigator () {
@@ -10,11 +10,11 @@ function WelcomeNavigator () {
 			screens={[
 				{
 					name: 'welcome',
-					component: WelcomeScreen,
+					component: Welcome.WelcomeScreen,
 				},
 				{
 					name: 'get-started',
-					component: GetStartedNavigator,
+					component: Welcome.GetStartedNavigator,
 				},
 			]}
 		/>
