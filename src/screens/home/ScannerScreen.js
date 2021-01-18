@@ -4,7 +4,7 @@ import { StatusBar } from 'expo-status-bar';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { Ionicons } from '@expo/vector-icons';
 import { BottomSection } from '../../components/home';
-import Scan from '../../icons/scan.svg';
+import ScanOutline from '../../icons/scan.svg';
 
 
 export default function QRScanner ({navigation}) {
@@ -18,13 +18,13 @@ export default function QRScanner ({navigation}) {
     })();
   }, []);
 
-  const _onBarCodeScanned = (result) => {
-  	navigation.navigate('member-profile')
-		// navigation.navigate('home', {scan: result})
+  const _onBarCodeScanned = scan => {
+  	// navigation.navigate('member-profile')
+		navigation.navigate('home', {scan})
   }
 
   const exitScanner = () => {
-  	navigation.navigate('home', {scan: null})
+  	navigation.goBack()
   }
 
 	return (
@@ -69,7 +69,8 @@ export default function QRScanner ({navigation}) {
 								onBarCodeScanned={_onBarCodeScanned}
 								style={{
 									width: '100%',
-									flexGrow: 1
+									// height: '100%',
+									flexGrow: 1,
 								}}
 							/>
 							<View
@@ -78,12 +79,12 @@ export default function QRScanner ({navigation}) {
 									alignItems: 'center',
 								}}
 							>
-								<Scan width={250} height={250}/>
+								<ScanOutline width={250} height={250}/>
 								<Text
 									style={{
 										color: '#fff',
 										fontSize: 18,
-										marginTop: 50
+										marginTop: 35
 									}}
 								>
 									Place QR Code Within Frame
