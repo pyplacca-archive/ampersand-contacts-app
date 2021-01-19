@@ -13,9 +13,13 @@ export const defaultScreenOptions = {
 	headerStyle: {
 		backgroundColor: colors.primary,
 	},
+	headerBackTitleVisible: false,
 	headerRightContainerStyle: {
 		paddingRight: 30,
 		paddingBottom: 20,
+	},
+	headerLeftContainerStyle: {
+		paddingLeft: 15,
 	}
 };
 

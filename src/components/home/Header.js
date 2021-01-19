@@ -7,7 +7,7 @@ import { colors } from '../../config';
 
 export default function HomeScreenHeader ({navigation}) {
 	const [paddingTop, iconSize, logoHeight] = [
-		StatusBar.currentHeight + 20, 24, 35
+		StatusBar.currentHeight + 30, 24, 35
 	];
 	return (
 		<View
