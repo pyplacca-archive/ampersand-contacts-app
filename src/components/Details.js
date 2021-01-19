@@ -59,7 +59,7 @@ export default function ProfileDetails(props) {
 						// ['location', props.location]
 					].map((list, i) => {
 						const [icon, info] = list;
-						return (
+						return info ? (
 							<View
 								style={{
 									flexDirection: 'row',
@@ -78,7 +78,7 @@ export default function ProfileDetails(props) {
 									{info}
 								</Text>
 							</View>
-						)
+						): null
 					})
 				}
 			</View>
