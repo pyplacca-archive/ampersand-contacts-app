@@ -53,7 +53,8 @@ export default function GetStartedScreen ({navigation: {navigate}}) {
 						flexDirection: 'row',
 						alignitems: 'center',
 						justifyContent: 'space-between',
-						margin: 40,
+						marginVertical: '5%',
+						marginHorizontal: '10%',
 					}}
 				>
 					<LinkButton
