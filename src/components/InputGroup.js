@@ -7,7 +7,7 @@ export default function InputGroup ({label, inputValue, type, onChangeText, plac
 	return (
 		<View
 			style={{
-				paddingVertical: 7,
+				paddingVertical: 10,
 				borderBottomWidth: 1,
 				borderBottomColor: '#ebebeb',
 				flexDirection: 'row',
