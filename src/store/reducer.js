@@ -5,13 +5,20 @@ function appReducer (state, action) {
 	const { type, payload } = action;
 
 	switch (type) {
-		case 'sign-in':
-			return {...state, signedIn: payload}
+		case 'sign_in':
+			return {...state, signedIn: true}
 
-		case 'update-user':
+		case 'update_user':
 			return {
 				...state,
 				user: Object.assign(state.user, payload)
+			}
+
+		case 'register':
+			return {
+				...state,
+				user: payload,
+				signedIn: true
 			}
 	}
 }
