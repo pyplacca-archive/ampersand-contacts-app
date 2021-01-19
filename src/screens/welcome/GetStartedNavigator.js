@@ -1,27 +1,39 @@
 import React from 'react';
-// import { Text } from 'react-native';
 import { StackNavigation } from '../../components/navigators';
-import { GetStartedScreen, Register, SignIn } from './get-started';
+import * as GetStarted from './get-started';
+import { screenModalOptions } from '../../config';
 
 
 export default function GetStartedNavigator ({navigation}) {
 	return (
 		<StackNavigation
+			screenOptions={{
+				cardOverlayEnabled: true,
+			}}
+			mode='modal'
 			screens={[
 				{
 					name: 'get-started',
-					component: GetStartedScreen,
+					component: GetStarted.GetStartedScreen,
 					options: {
 						headerShown: false
 					}
 				},
 				{
 					name: 'sign in',
-					component: SignIn,
+					component: GetStarted.SignIn,
 				},
 				{
 					name: 'register',
-					component: Register,
+					component: GetStarted.Register,
+				},
+				{
+					name: 'loading',
+					component: GetStarted.Loading,
+					options: {
+						...screenModalOptions,
+						headerShown: false,
+					}
 				}
 			]}
 		/>

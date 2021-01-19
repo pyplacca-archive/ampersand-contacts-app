@@ -27,3 +27,24 @@ export const horizontalCardStyle = {
 	},
 	cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
 };
+
+export const screenModalOptions = {
+	cardStyle: {
+		backgroundColor: 'rgba(0,0,0,.3)',
+	},
+	cardStyleInterpolator: ({ current: { progress } }) => ({
+    cardStyle: {
+      opacity: progress.interpolate({
+        inputRange: [0, 0.5, 0.9, 1],
+        outputRange: [0, 0.25, 0.7, 1],
+      }),
+    },
+    overlayStyle: {
+      opacity: progress.interpolate({
+        inputRange: [0, 1],
+        outputRange: [0, 0.5],
+        extrapolate: 'clamp',
+      }),
+    },
+  }),
+};
