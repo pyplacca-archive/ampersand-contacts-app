@@ -1,11 +1,13 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, Linking, Alert } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
+import * as WebBrowser from 'expo-web-browser';
 import { QRCode } from 'react-native-custom-qr-codes-expo';
 import { ProfileCard } from '../../components';
 import { BottomSection } from '../../components/home';
 import { AppContext } from '../../store';
 import { colors } from '../../config';
+import { members } from '../../storage';
 // import { str2ab } from '../../utils';
 
 
@@ -14,19 +16,54 @@ export default function HomeScreen ({navigation, route}) {
 	const [resultIn, setResultIn] = useState(false);
 
   useEffect(() => {
-  	const {scan} = route.params || {};
-  	if (scan && !resultIn) {
-  		setResultIn(true)
-  		alert (`BarCode scan complete\n\nType: ${scan.type}\nData: ${scan.data}`)
-  	}
+  	(async () => {
+	  	const {scan} = route.params || {};
+	  	if (scan && !resultIn) {
+	  		setResultIn(true);
+	  		memberData = members[scan.data];
+
+	  		if (memberData) {
+	  			navigation.navigate('member-profile', {details: memberData});
+	  		} else {
+		  		const canOpen = await Linking.canOpenURL(scan.data);
+
+					Alert.alert(
+						'Scan complete',
+						scan.data,
+						[
+							{ text: 'Cancel' },
+							{
+								text: !canOpen
+									? 'Copy data'
+									: 'Open link',
+								onPress: !canOpen
+									? () => copyToClipboard(scan.data)
+									: () => visitUrl(scan.data)
+							}
+						]
+					);
+	  		}
+	  	}
+  	})()
   }, [route.params])
+
+  const visitUrl = url => {
+  	// Linking.openURL(url).catch(err => null);
+  	WebBrowser
+  	.openBrowserAsync(url)
+  	.then(console.log)
+  }
+
+  const copyToClipboard = text => {
+  	console.log(text)
+  }
 
   const goToScanner = () => {
 		setResultIn(false)
 		navigation.navigate('scanner')
 	}
 
-	const contactDetails = 'https://codetraingh.com/' // JSON.stringify(str2ab(JSON.stringify(user)));
+	// const contactDetails = 'https://codetraingh.com/' // JSON.stringify(str2ab(JSON.stringify(user)));
 
 	return (
 		<View style={{ flex: 1 }}>
@@ -64,7 +101,7 @@ export default function HomeScreen ({navigation, route}) {
 						marginVertical: 70
 					}}
 				>
-					<QRCode content={contactDetails}/>
+					<QRCode content={user.id}/>
 				</View>
 				<ProfileCard name={user.name} role={user.role} photo={user.photo}/>
 			</View>
