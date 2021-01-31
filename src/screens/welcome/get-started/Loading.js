@@ -1,7 +1,6 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { View, Text, ActivityIndicator } from 'react-native';
-import { BlurView } from "@react-native-community/blur";
 
 
 export default function Loading ({route: {params}}) {
