@@ -2,56 +2,20 @@ import React, { useState, useContext, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import * as ImagePicker from 'expo-image-picker';
 import { ScrollView, View, Text, Image, Platform } from 'react-native';
-import uuid from 'uuid';
-import { InputGroup, Button } from '../../../components';
+import { connect } from 'react-redux';
+import firebase from '../../../firebase';
+import { InputGroup, Button, ErrorLabel } from '../../../components';
 import { ImageFrame, ImagePlaceholder } from '../../../components/get-started';
-import { AppContext } from '../../../store';
+import { colors, dbName } from '../../../config';
+// import { AppContext } from '../../../store';
 
 
-const inputs = [
-	{
-		label: 'Full Name',
-		type: 'username',
-		name: 'name',
-		placeholder: 'Jane Doe'
-	},
-	{
-		label: 'Email',
-		type: 'emailAddress',
-		name: 'email',
-		placeholder: 'janedoe@placeholder.com'
-	},
-	{
-		label: 'Phone Number',
-		type: 'telephoneNumber',
-		name: 'telephone',
-		placeholder: '1234567890'
-	},
-	{
-		label: 'Role',
-		type: 'none',
-		name: 'role',
-		placeholder: 'Managing Director'
-	},
-	{
-		label: 'Twitter',
-		type: 'none',
-		name: 'twitter',
-		placeholder: '@janedoe'
-	},
-	{
-		label: 'Linkedin',
-		type: 'none',
-		name: 'linkedin',
-		placeholder: '/jane.doe'
-	},
-]
-
-export default function Register ({navigation}) {
-	const {dispatch} = useContext(AppContext);
+function Register ({navigation, ...props}) {
+	// const {dispatch} = useContext(AppContext);
 
 	const [values, setValues] = useState({social: {}});
-	const [photo, setPhoto] = useState()
+	const [error, setError] = useState();
+	const [photo, setPhoto] = useState();
 
 	const requestPermission = async () => {
 		if (Platform.OS !== 'web') {
@@ -89,25 +53,31 @@ export default function Register ({navigation}) {
 		}
 	}
 
-	const generateId = () => {
-		const {name} = values;
-		const charsToUse = Array(...name).slice(0, 16);
-		return uuid.v4({
-			random: charsToUse.map((_, i) => name.charCodeAt(i))
-		})
-	}
-
 	const signup = () => {
 		navigation.navigate('loading', {message: 'signing up...'})
-		const userDetails = Object.assign(values, {id: generateId()});
-		console.log(userDetails);
-
-		setTimeout(() => {
-			dispatch({
-				type: 'register',
-				payload: userDetails
+		// create user account
+		firebase
+		.auth()
+		.createUserWithEmailAndPassword(values.email, values.password)
+		.then(({user: {uid}}) => {
+			const userDetails = Object.assign(values, {id: uid});
+			delete userDetails.password;
+			// store user record/details into our cloud database (firestore)
+			firebase.firestore().collection(dbName).doc(uid).set(userDetails)
+			.then(() => {
+				props.dispatch({
+					type: 'register',
+					payload: userDetails
+				})
 			})
-		}, 2500)
+			.catch(handleError)
+		})
+		.catch(handleError)
+	}
+
+	const handleError = err => {
+		setError(err.message || err)
+		navigation.pop()
 	}
 
 	return (
@@ -138,6 +108,8 @@ export default function Register ({navigation}) {
 					padding: 25
 				}}
 			>
+				{ error ? <ErrorLabel>{error}</ErrorLabel> : null }
+
 				{
 					inputs.map(({name, ...opts}, i) => (
 						<InputGroup
@@ -160,3 +132,50 @@ export default function Register ({navigation}) {
 		</View>
 	)
 };
+
+export default connect(state => state)(Register);
+
+
+const inputs = [
+	{
+		label: 'Full Name',
+		type: 'username',
+		name: 'name',
+		placeholder: 'Jane Doe'
+	},
+	{
+		label: 'Email',
+		type: 'emailAddress',
+		name: 'email',
+		placeholder: 'janedoe@placeholder.com'
+	},
+	{
+		label: 'Password',
+		type: 'password',
+		name: 'password',
+	},
+	{
+		label: 'Phone Number',
+		type: 'telephoneNumber',
+		name: 'telephone',
+		placeholder: '1234567890'
+	},
+	{
+		label: 'Role',
+		type: 'none',
+		name: 'role',
+		placeholder: 'Managing Director'
+	},
+	{
+		label: 'Twitter',
+		type: 'none',
+		name: 'twitter',
+		placeholder: '@janedoe'
+	},
+	{
+		label: 'Linkedin',
+		type: 'none',
+		name: 'linkedin',
+		placeholder: '/jane.doe'
+	},
+]

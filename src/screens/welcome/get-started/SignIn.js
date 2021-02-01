@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { ScrollView, View, Text, Image } from 'react-native';
-import { InputGroup, Button, LinkButton } from '../../../components';
+import { connect } from 'react-redux';
+import firebase from '../../../firebase';
+import { InputGroup, Button, LinkButton, ErrorLabel } from '../../../components';
 import { ImageFrame } from '../../../components/get-started';
-import { colors } from '../../../config';
+import { colors, dbName } from '../../../config';
 
 
 let errorTimeout;
 
-export default function SignIn () {
-	const [showError, setShowError] = useState(false);
+function SignIn (props) {
+	const [error, setError] = useState(false);
 	const [values, setValues] = useState({})
 
 	const handleInputChange = name => {
@@ -20,22 +22,28 @@ export default function SignIn () {
 	};
 
 	const handleSignIn = () => {
-		if (!credentialsAreValid()) {
-			clearTimeout(errorTimeout)
-			setShowError(true)
-			errorTimeout = setTimeout(() => setShowError(false), 5000)
-		} else {
-			showLoadingScreen()
-		}
-	}
+		showLoadingScreen();
 
-	const credentialsAreValid = () => {
-		const {email, password} = values;
-		return email && password
+		firebase.auth().signInWithEmailAndPassword(values.email, values.password)
+		.then(({user: {uid}}) => {
+			firebase.firestore().collection(dbName).doc(uid).get()
+			.then(doc => {
+				props.dispatch({
+					type: 'sign_in',
+					payload: doc.data()
+				})
+			})
+			.catch(err => clearLoadingScreen(err))
+		})
 	}
 
 	const showLoadingScreen = () => {
+		props.navigation.navigate('loading', {message: 'logging in...'});
+	}
 
+	const clearLoadingScreen = err => {
+		setError(err.message || err)
+		props.navigation.pop()
 	}
 
 	return (
@@ -63,11 +71,8 @@ export default function SignIn () {
 					padding: 25
 				}}
 			>
-				{
-					showError ? (
-						<ErrorLabel>Email or Password is incorrect. Check and try again</ErrorLabel>
-					) : null
-				}
+				{ error ? <ErrorLabel>error</ErrorLabel> : null }
+
 				<InputGroup
 					label='Email'
 					type='emailAddress'
@@ -114,16 +119,4 @@ export default function SignIn () {
 	)
 };
 
-
-function ErrorLabel (props) {
-	return (
-		<Text
-			style={{
-				color: colors.primary,
-				marginBottom: 20
-			}}
-		>
-			{props.children}
-		</Text>
-	)
-};
+export default connect()(SignIn);
