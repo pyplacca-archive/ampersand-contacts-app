@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { ScrollView, View, Text, Image } from 'react-native';
 import { connect } from 'react-redux';
-import firebase from '../../../firebase';
+import { auth, db } from '../../../firebase';
 import { InputGroup, Button, LinkButton, ErrorLabel } from '../../../components';
 import { ImageFrame } from '../../../components/get-started';
 import { colors, dbName } from '../../../config';
@@ -24,21 +24,20 @@ function SignIn (props) {
 	const handleSignIn = () => {
 		showLoadingScreen();
 
-		firebase.auth().signInWithEmailAndPassword(values.email, values.password)
+		auth.signInWithEmailAndPassword(values.email, values.password)
 		.then(({user: {uid}}) => {
-			firebase.firestore().collection(dbName).doc(uid).get()
-			.then(doc => {
-				props.dispatch({
-					type: 'sign_in',
-					payload: doc.data()
-				})
-			})
+			db.collection(dbName).doc(uid).get()
+			.then(doc => props.dispatch({
+				type: 'sign_in',
+				payload: doc.data()
+			}))
 			.catch(err => clearLoadingScreen(err))
 		})
+		.catch(err => clearLoadingScreen(err))
 	}
 
 	const showLoadingScreen = () => {
-		props.navigation.navigate('loading', {message: 'logging in...'});
+		props.navigation.navigate('loading', {message: 'signing in...'});
 	}
 
 	const clearLoadingScreen = err => {
@@ -71,7 +70,7 @@ function SignIn (props) {
 					padding: 25
 				}}
 			>
-				{ error ? <ErrorLabel>error</ErrorLabel> : null }
+				{ error ? <ErrorLabel>{error}</ErrorLabel> : null }
 
 				<InputGroup
 					label='Email'
@@ -119,4 +118,4 @@ function SignIn (props) {
 	)
 };
 
-export default connect()(SignIn);
+export default connect(()=>({}))(SignIn);
