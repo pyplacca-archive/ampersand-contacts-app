@@ -1,7 +1,9 @@
-/*
-	Store/Context reducers
-*/
-function appReducer (state, action) {
+export const rootState = {
+	signedIn: false,
+	user: null,
+}
+
+function rootReducer (state=rootState, action) {
 	const { type, payload } = action;
 
 	switch (type) {
@@ -28,4 +30,4 @@ function appReducer (state, action) {
 	}
 }
 
-export default appReducer;
+export default rootReducer;
