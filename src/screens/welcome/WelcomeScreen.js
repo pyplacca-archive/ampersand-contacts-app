@@ -1,7 +1,7 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { View, Text, Image, StyleSheet } from 'react-native';
-import { LinkButton } from '../../components';
+import { LinkButton, AppText } from '../../components';
 import logo from '../../../assets/logo.png'
 
 
@@ -34,23 +34,6 @@ function Welcome ({navigation}) {
 				Get Started
 			</LinkButton>
 		</View>
-	)
-};
-
-function AppText (props) {
-	return (
-		<Text
-			style={{
-				textTransform: 'uppercase',
-				textAlign: 'center',
-				marginVertical: 3,
-				fontSize: 24,
-				fontWeight: 'bold',
-				// fontFamily: 'WorkSansSemi',
-			}}
-		>
-			{ props.children }
-		</Text>
 	)
 };
 
