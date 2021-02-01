@@ -3,7 +3,12 @@ import { Text, TextInput, View } from 'react-native';
 import { colors } from '../config';
 
 
-export default function InputGroup ({label, inputValue, type, onChangeText, placeholder}) {
+export default function InputGroup ({label, inputValue, type='none', onChangeText, placeholder}) {
+	const keyboard = {
+		telephoneNumber: 'phone-pad',
+		emailAddress: 'email-address',
+		URL: 'url'
+	}
 	return (
 		<View
 			style={{
@@ -31,6 +36,7 @@ export default function InputGroup ({label, inputValue, type, onChangeText, plac
 				onChangeText={onChangeText}
 				secureTextEntry={type.includes('password')}
 				selectTextOnFocus
+				keyboardType={keyboard[type] || 'default'}
 			/>
 		</View>
 	)
