@@ -1,6 +1,6 @@
 export const rootState = {
 	signedIn: false,
-	user: null,
+	user: {},
 }
 
 function rootReducer (state=rootState, action) {
@@ -24,9 +24,11 @@ function rootReducer (state=rootState, action) {
 		case 'sign_out':
 			return {
 				...state,
-				user: null,
+				user: {},
 				signedIn: false
 			}
+
+		default: return state
 	}
 }
 
