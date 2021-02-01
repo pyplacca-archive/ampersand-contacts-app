@@ -1,10 +1,9 @@
 // import React from 'react';
 // import { createContext, useReducer } from 'react';
 import rootReducer, { rootState } from './reducer';
-
 import { createStore } from 'redux';
 import { persistReducer, persistStore } from 'redux-persist';
-import { AsyncStorage as storage } from 'react-native';
+import { AsyncStorage } from 'react-native';
 
 /*
 export const AppContext = createContext();
@@ -22,14 +21,13 @@ function AppProvider (props) {
 export default AppProvider;
 */
 
-const store = createStore(persistReducer(
-	// configuration for store persistence
-	{
-		key: 'root',
-		storage
-	},
-	rootReducer
-));
+// configuration for store persistence
+const persistConfig = {
+	key: 'root',
+	storage: AsyncStorage
+};
+
+const store = createStore(persistReducer(persistConfig, rootReducer));
 
 const persistor = persistStore(store);
 
