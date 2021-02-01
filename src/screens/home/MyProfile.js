@@ -1,13 +1,14 @@
 import React, { useContext } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { View } from 'react-native';
+import { connect } from 'react-redux';
 import { ProfileDetails } from '../../components';
-import { AppContext } from '../../store'
+// import { AppContext } from '../../store'
 
 
-export default function MyProfile () {
+function MyProfile ({user}) {
 
-	const {state: {user}} = useContext(AppContext);
+	// const {state: {user}} = useContext(AppContext);
 
 	return (
 		<View
@@ -22,3 +23,5 @@ export default function MyProfile () {
 		</View>
 	)
 };
+
+export default connect(state => state)(MyProfile)
