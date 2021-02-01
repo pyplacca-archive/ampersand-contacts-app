@@ -3,7 +3,9 @@ import { Text, View, Image, Pressable } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { Ionicons } from '@expo/vector-icons';
+import firebase from '../../firebase';
 import { BottomSection } from '../../components/home';
+import { dbName } from '../../config';
 import ScanOutline from '../../icons/scan.svg';
 
 
@@ -18,10 +20,27 @@ export default function QRScanner ({navigation}) {
     })();
   }, []);
 
-  const _onBarCodeScanned = scan => {
-  	// navigation.navigate('member-profile')
-		navigation.navigate('home', {scan})
-  }
+  const _onBarCodeScanned = async scan => {
+  	// display the retrieved datat on the member profile screen
+  	// if it contains valid information else navigate to home screen
+  	// and display the scanned data in an alert box
+		getMemberProfile(scan.data)
+		.then(details => navigation.navigate('member-profile', {details}))
+		.catch(() => navigation.navigate('home', {scan}))
+	}
+
+  const getMemberProfile = id => {
+  	return new Promise(async (resolve, reject) => {
+  		// retrieve and return the memeber information
+  		// with the given id if it exists in the database
+	  	try {
+  			const res = await firebase.firestore().collection(dbName).doc(id).get();
+	  		resolve(res.data());
+	  	} catch (err) {
+	  		reject(err);
+	  	}
+  	})
+  };
 
   const exitScanner = () => {
   	navigation.goBack()

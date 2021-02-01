@@ -3,16 +3,15 @@ import { Text, View, Linking, Alert } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import * as WebBrowser from 'expo-web-browser';
 import { QRCode } from 'react-native-custom-qr-codes-expo';
+import { connect } from 'react-redux';
 import { ProfileCard } from '../../components';
 import { BottomSection } from '../../components/home';
-import { AppContext } from '../../store';
+// import { AppContext } from '../../store';
 import { colors } from '../../config';
-import { members } from '../../storage';
-// import { str2ab } from '../../utils';
 
 
-export default function HomeScreen ({navigation, route}) {
-	const {state: {user}} = useContext(AppContext);
+function HomeScreen ({navigation, route, user, ...props}) {
+	// const {state: {user}} = useContext(AppContext);
 	const [resultIn, setResultIn] = useState(false);
 
   useEffect(() => {
@@ -20,29 +19,24 @@ export default function HomeScreen ({navigation, route}) {
 	  	const {scan} = route.params || {};
 	  	if (scan && !resultIn) {
 	  		setResultIn(true);
-	  		memberData = members[scan.data];
 
-	  		if (memberData) {
-	  			navigation.navigate('member-profile', {details: memberData});
-	  		} else {
-		  		const canOpen = await Linking.canOpenURL(scan.data);
+	  		const canOpen = await Linking.canOpenURL(scan.data);
 
-					Alert.alert(
-						'Scan complete',
-						scan.data,
-						[
-							{ text: 'Cancel' },
-							{
-								text: !canOpen
-									? 'Copy data'
-									: 'Open link',
-								onPress: !canOpen
-									? () => copyToClipboard(scan.data)
-									: () => visitUrl(scan.data)
-							}
-						]
-					);
-	  		}
+				Alert.alert(
+					'Scan complete',
+					scan.data,
+					[
+						{ text: 'Cancel' },
+						{
+							text: !canOpen
+								? 'Copy data'
+								: 'Open link',
+							onPress: !canOpen
+								? () => copyToClipboard(scan.data)
+								: () => visitUrl(scan.data)
+						}
+					]
+				);
 	  	}
   	})()
   }, [route.params])
@@ -51,19 +45,17 @@ export default function HomeScreen ({navigation, route}) {
   	// Linking.openURL(url).catch(err => null);
   	WebBrowser
   	.openBrowserAsync(url)
-  	.then(console.log)
-  }
+  	.then(console.log);
+  };
 
   const copyToClipboard = text => {
-  	console.log(text)
-  }
+  	console.log(text);
+  };
 
   const goToScanner = () => {
 		setResultIn(false)
 		navigation.navigate('scanner')
 	}
-
-	// const contactDetails = 'https://codetraingh.com/' // JSON.stringify(str2ab(JSON.stringify(user)));
 
 	return (
 		<View style={{ flex: 1 }}>
@@ -113,3 +105,5 @@ export default function HomeScreen ({navigation, route}) {
 		</View>
 	)
 };
+
+export default connect(state => state)(HomeScreen);
