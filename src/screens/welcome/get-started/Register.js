@@ -3,14 +3,14 @@ import { StatusBar } from 'expo-status-bar';
 import * as ImagePicker from 'expo-image-picker';
 import { ScrollView, View, Text, Image, Platform } from 'react-native';
 import { connect } from 'react-redux';
-import firebase from '../../../firebase';
+import { auth, db, storage } from '../../../firebase';
 import { InputGroup, Button, ErrorLabel } from '../../../components';
 import { ImageFrame, ImagePlaceholder } from '../../../components/get-started';
 import { colors, dbName } from '../../../config';
 // import { AppContext } from '../../../store';
 
 
-function Register ({navigation, ...props}) {
+function Register ({navigation, dispatch}) {
 	// const {dispatch} = useContext(AppContext);
 
 	const [values, setValues] = useState({social: {}});
@@ -56,18 +56,17 @@ function Register ({navigation, ...props}) {
 	const signup = () => {
 		navigation.navigate('loading', {message: 'signing up...'})
 		// create user account
-		firebase
-		.auth()
+		auth
 		.createUserWithEmailAndPassword(values.email, values.password)
-		.then(({user: {uid}}) => {
-			const userDetails = Object.assign(values, {id: uid});
-			delete userDetails.password;
+		.then(async ({user: {uid}}) => {
+			const userInfo = Object.assign(values, {id: uid});
+			delete userInfo.password;
 			// store user record/details into our cloud database (firestore)
-			firebase.firestore().collection(dbName).doc(uid).set(userDetails)
+			db.collection(dbName).doc(uid).set(userInfo)
 			.then(() => {
-				props.dispatch({
+				dispatch({
 					type: 'register',
-					payload: userDetails
+					payload: userInfo
 				})
 			})
 			.catch(handleError)
@@ -133,7 +132,7 @@ function Register ({navigation, ...props}) {
 	)
 };
 
-export default connect(state => state)(Register);
+export default connect()(Register);
 
 
 const inputs = [
@@ -162,19 +161,18 @@ const inputs = [
 	},
 	{
 		label: 'Role',
-		type: 'none',
 		name: 'role',
 		placeholder: 'Managing Director'
 	},
 	{
 		label: 'Twitter',
-		type: 'none',
+		type: 'URL',
 		name: 'twitter',
 		placeholder: '@janedoe'
 	},
 	{
 		label: 'Linkedin',
-		type: 'none',
+		type: 'URL',
 		name: 'linkedin',
 		placeholder: '/jane.doe'
 	},
