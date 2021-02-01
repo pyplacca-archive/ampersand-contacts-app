@@ -6,12 +6,10 @@ function appReducer (state, action) {
 
 	switch (type) {
 		case 'sign_in':
-			return {...state, signedIn: true}
-
-		case 'update_user':
 			return {
 				...state,
-				user: Object.assign(state.user, payload)
+				signedIn: true,
+				user: payload
 			}
 
 		case 'register':
@@ -19,6 +17,13 @@ function appReducer (state, action) {
 				...state,
 				user: payload,
 				signedIn: true
+			}
+
+		case 'sign_out':
+			return {
+				...state,
+				user: null,
+				signedIn: false
 			}
 	}
 }
