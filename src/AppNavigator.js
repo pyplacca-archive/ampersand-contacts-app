@@ -3,11 +3,12 @@ import { NavigationContainer } from '@react-navigation/native';
 import { StackNavigation } from './components/navigators';
 import HomeNavigator from './screens/HomeNavigator'
 import WelcomeNavigator from './screens/WelcomeNavigator'
-import { AppContext } from './store';
+// import { AppContext } from './store';
+import { connect } from 'react-redux';
 
 
-export default function AppNavigator() {
-  const {state} = useContext(AppContext);
+function AppNavigator (props) {
+  // const {state} = useContext(AppContext);
   return (
     <NavigationContainer>
       <StackNavigation
@@ -15,7 +16,7 @@ export default function AppNavigator() {
           headerShown: false,
         }}
         screens={
-          !state.signedIn ? [
+          !props.signedIn ? [
             {
               name: 'welcome',
               component: WelcomeNavigator,
@@ -31,3 +32,5 @@ export default function AppNavigator() {
     </NavigationContainer>
   );
 };
+
+export default connect(state => state)(AppNavigator);
