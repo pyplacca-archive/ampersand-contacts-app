@@ -1,6 +1,8 @@
 import { CardStyleInterpolators } from '@react-navigation/stack';
 
 
+export const dbName = 'Ampersand Contacts';
+
 export const colors = {
 	primary: '#fe2b4c',
 	secondary: '#434c4e',
