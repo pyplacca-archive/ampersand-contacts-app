@@ -11,24 +11,11 @@ function AppNavigator (props) {
   // const {state} = useContext(AppContext);
   return (
     <NavigationContainer>
-      <StackNavigation
-        screenOptions={{
-          headerShown: false,
-        }}
-        screens={
-          !props.signedIn ? [
-            {
-              name: 'welcome',
-              component: WelcomeNavigator,
-            },
-          ] : [
-            {
-              name: 'home',
-              component: HomeNavigator,
-            },
-          ]
-        }
-      />
+      {
+        !props.signedIn
+        ? <WelcomeNavigator/>
+        : <HomeNavigator/>
+      }
     </NavigationContainer>
   );
 };
